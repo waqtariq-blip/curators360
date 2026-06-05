@@ -147,38 +147,58 @@ section{position:relative;padding:110px 0}
 
 /* DEMO TOUR */
 .demo-sec{padding:90px 0 110px;background:var(--ink-2);position:relative}
-.demo-head{text-align:center;margin-bottom:48px}
-.demo-frame{
-  position:relative;max-width:980px;margin:0 auto;
-  border-radius:20px;overflow:hidden;border:1px solid var(--line-strong);
-  box-shadow:0 30px 80px rgba(0,0,0,.5);
-  aspect-ratio:16/9;background:var(--ink-3);
+.demo-head{text-align:center;margin-bottom:52px}
+/* Thumbnail row */
+.tour-thumbs{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:580px){.tour-thumbs{display:flex;overflow-x:auto;gap:12px;padding-bottom:6px;scroll-snap-type:x mandatory;scrollbar-width:none}.tour-thumbs::-webkit-scrollbar{display:none}.thumb-wrap{flex:0 0 72vw;scroll-snap-align:start}}
+.tour-thumb{
+  position:relative;border-radius:16px;overflow:hidden;cursor:pointer;
+  aspect-ratio:4/3;border:2px solid var(--line);width:100%;
+  transition:transform .3s cubic-bezier(.2,.7,.2,1),border-color .3s,box-shadow .3s;
 }
+.tour-thumb:hover{transform:translateY(-5px);border-color:rgba(224,168,73,.45)}
+.tour-thumb.active{border-color:var(--gold);box-shadow:0 0 0 1px rgba(224,168,73,.2),0 18px 52px rgba(224,168,73,.16)}
+/* Thumbnail backgrounds */
+.thumb-bg{position:absolute;inset:0;transition:transform .6s ease}
+.tour-thumb:hover .thumb-bg,.tour-thumb.active .thumb-bg{transform:scale(1.06)}
+.thumb-bg-1{background:radial-gradient(circle at 38% 62%,rgba(224,168,73,.42) 0%,transparent 52%),radial-gradient(circle at 78% 22%,rgba(180,100,20,.22) 0%,transparent 45%),linear-gradient(158deg,#1c0f02 0%,#0d0804 100%)}
+.thumb-bg-2{background:radial-gradient(circle at 55% 48%,rgba(18,105,72,.48) 0%,transparent 52%),radial-gradient(circle at 20% 80%,rgba(10,75,48,.22) 0%,transparent 42%),linear-gradient(148deg,#041510 0%,#020a07 100%)}
+.thumb-bg-3{background:radial-gradient(circle at 38% 58%,rgba(48,68,162,.42) 0%,transparent 50%),radial-gradient(circle at 75% 28%,rgba(28,48,128,.22) 0%,transparent 45%),linear-gradient(138deg,#06081a 0%,#030510 100%)}
+/* Subtle grid overlay */
+.thumb-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:22px 22px;mask-image:radial-gradient(ellipse 88% 88% at 50% 50%,#000 35%,transparent 100%)}
+/* Gold tick shown when active */
+.thumb-tick{position:absolute;top:11px;right:11px;width:22px;height:22px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(.5);transition:opacity .22s,transform .22s;z-index:3}
+.tour-thumb.active .thumb-tick{opacity:1;transform:scale(1)}
+.thumb-tick svg{width:12px;height:12px;color:var(--ink)}
+/* Bottom overlay — now just centers the play button */
+.thumb-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:14px;background:linear-gradient(to bottom,transparent 45%,rgba(0,0,0,.45) 100%);z-index:2}
+/* Play button */
+.thumb-play{width:50px;height:50px;border-radius:50%;border:1.5px solid rgba(224,168,73,.6);display:flex;align-items:center;justify-content:center;background:rgba(224,168,73,.1);transition:transform .3s,background .3s,border-color .3s}
+.tour-thumb:hover .thumb-play,.tour-thumb.active .thumb-play{background:rgba(224,168,73,.2);border-color:var(--gold);transform:scale(1.12)}
+.thumb-play svg{width:20px;height:20px;color:var(--gold);margin-left:2px}
+/* Label below the card */
+.thumb-info{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px 2px 0}
+.thumb-cat{font-size:12px;letter-spacing:.11em;text-transform:uppercase;font-weight:600;color:var(--paper-dim);transition:color .25s}
+.tour-thumb.active+.thumb-info .thumb-cat{color:var(--gold)}
+.thumb-soon{font-size:9.5px;background:rgba(244,240,230,.08);color:var(--paper-faint);padding:3px 8px;border-radius:100px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;white-space:nowrap}
+/* Player reveal */
+.tour-player-wrap{max-height:0;overflow:hidden;opacity:0;transition:max-height .65s cubic-bezier(.4,0,.2,1),opacity .4s ease .1s,margin-top .5s ease;margin-top:0}
+.tour-player-wrap.open{max-height:800px;opacity:1;margin-top:18px}
+/* Demo frame */
+.demo-frame{position:relative;width:100%;border-radius:16px;overflow:hidden;border:1px solid var(--line-strong);box-shadow:0 24px 64px rgba(0,0,0,.55);aspect-ratio:16/9;background:var(--ink-3)}
 .demo-frame iframe{width:100%;height:100%;border:0;display:block}
-/* CloudPano script embed — force it to fill the frame */
 .demo-frame .cloudpano-embed{width:100%;height:100%}
-.demo-frame .cloudpano-embed iframe,
-.demo-frame .cloudpano-embed > div{width:100%!important;height:100%!important;border:0!important}
-@media(max-width:640px){.demo-frame{aspect-ratio:auto;height:62vh;min-height:340px}}
-/* Placeholder shown until you paste a real embed */
-.demo-placeholder{
-  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:18px;text-align:center;padding:30px;
-  background:
-    radial-gradient(circle at 50% 38%,rgba(224,168,73,.10),transparent 60%),
-    linear-gradient(180deg,var(--ink-3),var(--ink));
-}
-.demo-placeholder .ring{
-  width:78px;height:78px;border-radius:50%;border:1.5px solid rgba(224,168,73,.4);
-  display:flex;align-items:center;justify-content:center;position:relative;
-}
+.demo-frame .cloudpano-embed iframe,.demo-frame .cloudpano-embed>div{width:100%!important;height:100%!important;border:0!important}
+@media(max-width:640px){.demo-frame{aspect-ratio:auto;height:56vw;min-height:240px}}
+/* Placeholder */
+.demo-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;text-align:center;padding:30px;background:radial-gradient(circle at 50% 38%,rgba(224,168,73,.10),transparent 60%),linear-gradient(180deg,var(--ink-3),var(--ink))}
+.demo-placeholder .ring{width:78px;height:78px;border-radius:50%;border:1.5px solid rgba(224,168,73,.4);display:flex;align-items:center;justify-content:center;position:relative}
 .demo-placeholder .ring::after{content:"";position:absolute;inset:-9px;border-radius:50%;border:1px solid rgba(224,168,73,.18);animation:ping 2.6s ease-out infinite}
 @keyframes ping{0%{transform:scale(.85);opacity:.8}100%{transform:scale(1.25);opacity:0}}
 .demo-placeholder .ring svg{width:30px;height:30px;color:var(--gold)}
 .demo-placeholder h3{font-family:'Fraunces',serif;font-size:24px;color:var(--paper)}
 .demo-placeholder p{font-size:14.5px;color:var(--paper-dim);max-width:420px}
-.demo-placeholder code{background:rgba(244,240,230,.08);padding:2px 7px;border-radius:5px;font-size:13px;color:var(--gold)}
-.demo-caption{text-align:center;margin-top:24px;font-size:14px;color:var(--paper-faint)}
+.demo-caption{text-align:center;margin-top:20px;font-size:14px;color:var(--paper-faint)}
 
 /* DIFFERENCE */
 .diff-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:60px}
@@ -332,11 +352,56 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px}
       <span class="tag" style="justify-content:center">See it live</span>
       <h2 class="sec-head" style="margin:0 auto">Don't take our word for it. <span class="serif-i">Step inside.</span></h2>
     </div>
-    <div class="demo-frame reveal">
-      <!-- Live CloudPano tour embed -->
-      <div id="6kYhXuKTNi" class="cloudpano-embed"><script type="text/javascript" async data-short="6kYhXuKTNi" data-path="tours" data-is-self-hosted="false" width="100%" height="500px" src="https://app.cloudpano.com/public/shareScript.js"></script></div>
+
+    <!-- 3 horizontal thumbnail cards -->
+    <div class="tour-thumbs reveal">
+
+      <!-- CARD 1: Banquet Hall — LIVE -->
+      <div class="thumb-wrap">
+        <div class="tour-thumb active" data-tour="banquet">
+          <div class="thumb-bg thumb-bg-1"></div>
+          <div class="thumb-grid"></div>
+          <div class="thumb-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="thumb-overlay">
+            <div class="thumb-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="9 7 9 17 17 12"/></svg></div>
+          </div>
+        </div>
+        <div class="thumb-info"><span class="thumb-cat">Banquet Hall</span></div>
+      </div>
+
+      <!-- CARD 2: Restaurant — COMING SOON -->
+      <div class="thumb-wrap">
+        <div class="tour-thumb" data-tour="restaurant">
+          <div class="thumb-bg thumb-bg-2"></div>
+          <div class="thumb-grid"></div>
+          <div class="thumb-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="thumb-overlay">
+            <div class="thumb-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="9 7 9 17 17 12"/></svg></div>
+          </div>
+        </div>
+        <div class="thumb-info"><span class="thumb-cat">Restaurant</span><span class="thumb-soon">Coming soon</span></div>
+      </div>
+
+      <!-- CARD 3: Showroom — COMING SOON -->
+      <div class="thumb-wrap">
+        <div class="tour-thumb" data-tour="showroom">
+          <div class="thumb-bg thumb-bg-3"></div>
+          <div class="thumb-grid"></div>
+          <div class="thumb-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="thumb-overlay">
+            <div class="thumb-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="9 7 9 17 17 12"/></svg></div>
+          </div>
+        </div>
+        <div class="thumb-info"><span class="thumb-cat">Showroom</span><span class="thumb-soon">Coming soon</span></div>
+      </div>
+
     </div>
-    <p class="demo-caption">Best experienced on desktop or in fullscreen. Drag to look around, click to move through the space.</p>
+
+    <!-- Player — slides open below on thumbnail click -->
+    <div class="tour-player-wrap" id="tour-player-wrap">
+      <div class="demo-frame" id="tour-player-inner"></div>
+      <p class="demo-caption">Best on desktop or fullscreen. Drag to look around — click the arrows to move through the space.</p>
+    </div>
   </div>
 </section>
 
@@ -536,6 +601,51 @@ const nav=document.getElementById('nav');
 addEventListener('scroll',()=>{nav.classList.toggle('scrolled',scrollY>40)});
 const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
 document.querySelectorAll('.reveal').forEach((el,i)=>{el.style.transitionDelay=(i%4*60)+'ms';io.observe(el)});
+
+// Tour data — add new tours here when ready
+const tourData={
+  banquet:{type:'cloudpano',short:'6kYhXuKTNi'},
+  restaurant:{type:'placeholder',title:'Restaurant tour coming soon',text:"We're shooting this next. Check back shortly."},
+  showroom:{type:'placeholder',title:'Showroom tour coming soon',text:'More spaces added weekly. Come back soon.'}
+};
+
+let currentTour=null;
+
+function loadTour(id){
+  const inner=document.getElementById('tour-player-inner');
+  const wrap=document.getElementById('tour-player-wrap');
+  inner.innerHTML='';
+  const tour=tourData[id];
+  if(!tour)return;
+  if(tour.type==='cloudpano'){
+    const div=document.createElement('div');
+    div.className='cloudpano-embed';
+    div.style.cssText='width:100%;height:100%';
+    const s=document.createElement('script');
+    s.type='text/javascript';s.async=true;
+    s.dataset.short=tour.short;s.dataset.path='tours';s.dataset.isSelfHosted='false';
+    s.setAttribute('width','100%');s.setAttribute('height','500px');
+    s.src='https://app.cloudpano.com/public/shareScript.js?v='+Date.now();
+    div.appendChild(s);inner.appendChild(div);
+  }else{
+    inner.innerHTML=`<div class="demo-placeholder"><div class="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><polygon points="9 7 9 17 17 12 9 7" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="10"/></svg></div><h3>${tour.title}</h3><p>${tour.text}</p></div>`;
+  }
+  wrap.classList.add('open');
+  currentTour=id;
+}
+
+document.querySelectorAll('.tour-thumb').forEach(thumb=>{
+  thumb.addEventListener('click',()=>{
+    const id=thumb.dataset.tour;
+    document.querySelectorAll('.tour-thumb').forEach(t=>t.classList.remove('active'));
+    thumb.classList.add('active');
+    loadTour(id);
+    setTimeout(()=>{document.getElementById('tour-player-wrap').scrollIntoView({behavior:'smooth',block:'nearest'})},160);
+  });
+});
+
+// Auto-load first tour on page load
+setTimeout(()=>{loadTour('banquet')},420);
 </script>
 
 </body>
