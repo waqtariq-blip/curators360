@@ -149,7 +149,7 @@ section{position:relative;padding:110px 0}
 .demo-sec{padding:90px 0 110px;background:var(--ink-2);position:relative}
 .demo-head{text-align:center;margin-bottom:52px}
 /* Thumbnail row */
-.tour-thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.tour-thumbs{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
 @media(max-width:580px){.tour-thumbs{display:flex;overflow-x:auto;gap:12px;padding-bottom:6px;scroll-snap-type:x mandatory;scrollbar-width:none}.tour-thumbs::-webkit-scrollbar{display:none}.thumb-wrap{flex:0 0 72vw;scroll-snap-align:start}}
 .tour-thumb{
   position:relative;border-radius:16px;overflow:hidden;cursor:pointer;
@@ -354,7 +354,7 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px}
       <h2 class="sec-head" style="margin:0 auto">Don't take our word for it. <span class="serif-i">Step inside.</span></h2>
     </div>
 
-    <!-- 4 horizontal thumbnail cards -->
+    <!-- 3 horizontal thumbnail cards -->
     <div class="tour-thumbs reveal">
 
       <!-- CARD 1: Banquet Hall — LIVE -->
@@ -394,19 +394,6 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px}
           </div>
         </div>
         <div class="thumb-info"><span class="thumb-cat">Kickstart</span></div>
-      </div>
-
-      <!-- CARD 4: Showroom — COMING SOON -->
-      <div class="thumb-wrap">
-        <div class="tour-thumb" data-tour="showroom">
-          <div class="thumb-bg thumb-bg-3"></div>
-          <div class="thumb-grid"></div>
-          <div class="thumb-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-          <div class="thumb-overlay">
-            <div class="thumb-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="9 7 9 17 17 12"/></svg></div>
-          </div>
-        </div>
-        <div class="thumb-info"><span class="thumb-cat">Showroom</span><span class="thumb-soon">Coming soon</span></div>
       </div>
 
     </div>
@@ -620,8 +607,7 @@ document.querySelectorAll('.reveal').forEach((el,i)=>{el.style.transitionDelay=(
 const tourData={
   banquet:{type:'cloudpano',short:'6kYhXuKTNi'},
   restaurant:{type:'cloudpano',short:'ls8x4q5mF'},
-  coworking:{type:'cloudpano',short:'2EkNK6xWc'},
-  showroom:{type:'placeholder',title:'Showroom tour coming soon',text:'More spaces added weekly. Come back soon.'}
+  coworking:{type:'cloudpano',short:'2EkNK6xWc'}
 };
 
 let currentTour=null;
