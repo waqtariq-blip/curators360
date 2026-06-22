@@ -149,7 +149,7 @@ section{position:relative;padding:110px 0}
 .demo-sec{padding:90px 0 110px;background:var(--ink-2);position:relative}
 .demo-head{text-align:center;margin-bottom:52px}
 /* Thumbnail row */
-.tour-thumbs{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.tour-thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
 @media(max-width:580px){.tour-thumbs{display:flex;overflow-x:auto;gap:12px;padding-bottom:6px;scroll-snap-type:x mandatory;scrollbar-width:none}.tour-thumbs::-webkit-scrollbar{display:none}.thumb-wrap{flex:0 0 72vw;scroll-snap-align:start}}
 .tour-thumb{
   position:relative;border-radius:16px;overflow:hidden;cursor:pointer;
@@ -164,6 +164,7 @@ section{position:relative;padding:110px 0}
 .thumb-bg-1{background:radial-gradient(circle at 38% 62%,rgba(224,168,73,.42) 0%,transparent 52%),radial-gradient(circle at 78% 22%,rgba(180,100,20,.22) 0%,transparent 45%),linear-gradient(158deg,#1c0f02 0%,#0d0804 100%)}
 .thumb-bg-2{background:radial-gradient(circle at 55% 48%,rgba(18,105,72,.48) 0%,transparent 52%),radial-gradient(circle at 20% 80%,rgba(10,75,48,.22) 0%,transparent 42%),linear-gradient(148deg,#041510 0%,#020a07 100%)}
 .thumb-bg-3{background:radial-gradient(circle at 38% 58%,rgba(48,68,162,.42) 0%,transparent 50%),radial-gradient(circle at 75% 28%,rgba(28,48,128,.22) 0%,transparent 45%),linear-gradient(138deg,#06081a 0%,#030510 100%)}
+.thumb-bg-4{background:radial-gradient(circle at 42% 56%,rgba(168,85,247,.42) 0%,transparent 52%),radial-gradient(circle at 76% 24%,rgba(124,58,237,.24) 0%,transparent 45%),linear-gradient(145deg,#150a22 0%,#08050f 100%)}
 /* Subtle grid overlay */
 .thumb-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:22px 22px;mask-image:radial-gradient(ellipse 88% 88% at 50% 50%,#000 35%,transparent 100%)}
 /* Gold tick shown when active */
@@ -353,7 +354,7 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px}
       <h2 class="sec-head" style="margin:0 auto">Don't take our word for it. <span class="serif-i">Step inside.</span></h2>
     </div>
 
-    <!-- 3 horizontal thumbnail cards -->
+    <!-- 4 horizontal thumbnail cards -->
     <div class="tour-thumbs reveal">
 
       <!-- CARD 1: Banquet Hall — LIVE -->
@@ -369,7 +370,7 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px}
         <div class="thumb-info"><span class="thumb-cat">Banquet Hall</span></div>
       </div>
 
-      <!-- CARD 2: Restaurant — COMING SOON -->
+      <!-- CARD 2: Rajdhani Express (Restaurant) — LIVE -->
       <div class="thumb-wrap">
         <div class="tour-thumb" data-tour="restaurant">
           <div class="thumb-bg thumb-bg-2"></div>
@@ -379,10 +380,23 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px}
             <div class="thumb-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="9 7 9 17 17 12"/></svg></div>
           </div>
         </div>
-        <div class="thumb-info"><span class="thumb-cat">Restaurant</span><span class="thumb-soon">Coming soon</span></div>
+        <div class="thumb-info"><span class="thumb-cat">Rajdhani Express</span></div>
       </div>
 
-      <!-- CARD 3: Showroom — COMING SOON -->
+      <!-- CARD 3: Kickstart (Coworking) — LIVE -->
+      <div class="thumb-wrap">
+        <div class="tour-thumb" data-tour="coworking">
+          <div class="thumb-bg thumb-bg-4"></div>
+          <div class="thumb-grid"></div>
+          <div class="thumb-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="thumb-overlay">
+            <div class="thumb-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="9 7 9 17 17 12"/></svg></div>
+          </div>
+        </div>
+        <div class="thumb-info"><span class="thumb-cat">Kickstart</span></div>
+      </div>
+
+      <!-- CARD 4: Showroom — COMING SOON -->
       <div class="thumb-wrap">
         <div class="tour-thumb" data-tour="showroom">
           <div class="thumb-bg thumb-bg-3"></div>
@@ -605,7 +619,8 @@ document.querySelectorAll('.reveal').forEach((el,i)=>{el.style.transitionDelay=(
 // Tour data — add new tours here when ready
 const tourData={
   banquet:{type:'cloudpano',short:'6kYhXuKTNi'},
-  restaurant:{type:'placeholder',title:'Restaurant tour coming soon',text:"We're shooting this next. Check back shortly."},
+  restaurant:{type:'cloudpano',short:'ls8x4q5mF'},
+  coworking:{type:'cloudpano',short:'2EkNK6xWc'},
   showroom:{type:'placeholder',title:'Showroom tour coming soon',text:'More spaces added weekly. Come back soon.'}
 };
 
