@@ -681,4 +681,19 @@ function loadTour(id){
   currentTour=id;
 }
 
-document.querySelectorAll('.tour-thum
+document.querySelectorAll('.tour-thumb').forEach(thumb=>{
+  thumb.addEventListener('click',()=>{
+    const id=thumb.dataset.tour;
+    document.querySelectorAll('.tour-thumb').forEach(t=>t.classList.remove('active'));
+    thumb.classList.add('active');
+    loadTour(id);
+    setTimeout(()=>{document.getElementById('tour-player-wrap').scrollIntoView({behavior:'smooth',block:'nearest'})},160);
+  });
+});
+
+// Auto-load first tour on page load
+setTimeout(()=>{loadTour('banquet')},420);
+</script>
+
+</body>
+</html>
