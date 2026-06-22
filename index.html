@@ -192,8 +192,10 @@ section{position:relative;padding:110px 0}
 /* Demo frame */
 .demo-frame{position:relative;width:100%;border-radius:16px;overflow:hidden;border:1px solid var(--line-strong);box-shadow:0 24px 64px rgba(0,0,0,.55);aspect-ratio:16/9;background:var(--ink-3)}
 .demo-frame iframe{width:100%;height:100%;border:0;display:block}
-/* Native CloudPano iframe embed — isolated browsing context, doesn't block the page's main thread */
-.tour-iframe{position:absolute;inset:0;width:100%;height:100%;border:0;z-index:2}
+/* CloudPano's shareScript.js injects its own iframe/canvas into this div — force it to fill the frame */
+.cloudpano-embed{width:100%;height:100%}
+.cloudpano-embed iframe,.cloudpano-embed canvas,.cloudpano-embed>div{width:100%!important;height:100%!important;border:0!important}
+.tour-mount{position:absolute;inset:0;width:100%;height:100%}
 @media(max-width:640px){.demo-frame{aspect-ratio:auto;height:56vw;min-height:240px}}
 /* Placeholder / loading overlay — sits above the iframe until it reports ready, or stands alone for "coming soon" cards */
 .demo-placeholder{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;text-align:center;padding:30px;background:radial-gradient(circle at 50% 38%,rgba(224,168,73,.10),transparent 60%),linear-gradient(180deg,var(--ink-3),var(--ink));transition:opacity .35s ease}
@@ -619,37 +621,62 @@ const tourData={
 };
 
 let currentTour=null;
+const tourMounts={}; // id -> mounted DOM node, built once and reused
 
 function loadTour(id){
   const inner=document.getElementById('tour-player-inner');
   const wrap=document.getElementById('tour-player-wrap');
-  inner.innerHTML='';
   const tour=tourData[id];
   if(!tour)return;
+
+  // Hide whatever's currently showing — we never destroy a mount once built,
+  // we just show/hide it. Rebuilding CloudPano's embed from scratch on every
+  // click was what caused the freeze (full WebGL viewer reinit each time).
+  Object.values(tourMounts).forEach(el=>{ if(el!==tourMounts[id]) el.style.display='none'; });
+
+  if(tourMounts[id]){
+    tourMounts[id].style.display='block';
+    wrap.classList.add('open');
+    currentTour=id;
+    return;
+  }
+
+  const mount=document.createElement('div');
+  mount.className='tour-mount';
+  inner.appendChild(mount);
+  tourMounts[id]=mount;
+
   if(tour.type==='cloudpano'){
-    // Native CloudPano iframe embed (their own recommended <iframe> method) instead of
-    // injecting the shareScript.js bootstrap on every click — that script reinitializes a
-    // full WebGL viewer on the *parent* page's main thread each time, which is what was
-    // causing the freeze. The iframe runs in its own browsing context, so it can't block ours.
     const loader=document.createElement('div');
     loader.className='demo-placeholder';
-    loader.id='tourLoading';
     loader.innerHTML='<div class="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><polygon points="9 7 9 17 17 12 9 7" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="10"/></svg></div><h3>Loading the walkthrough…</h3><p>First load can take a few seconds — full 360° footage is a big file.</p>';
-    const frame=document.createElement('iframe');
-    frame.className='tour-iframe';
-    frame.src='https://app.cloudpano.com/tours/'+tour.short;
-    frame.loading='lazy';
-    frame.allow='xr-spatial-tracking; gyroscope; accelerometer';
-    frame.allowFullscreen=true;
-    frame.addEventListener('load',()=>{
-      loader.classList.add('fading');
-      setTimeout(()=>loader.remove(),400);
+    const embedDiv=document.createElement('div');
+    embedDiv.className='cloudpano-embed';
+    const s=document.createElement('script');
+    s.type='text/javascript';s.async=true;
+    s.dataset.short=tour.short;s.dataset.path='tours';s.dataset.isSelfHosted='false';
+    s.setAttribute('width','100%');s.setAttribute('height','500px');
+    s.src='https://app.cloudpano.com/public/shareScript.js';
+    embedDiv.appendChild(s);
+    mount.appendChild(loader);
+    mount.appendChild(embedDiv);
+
+    // CloudPano's script injects an iframe/canvas asynchronously once it boots —
+    // watch for it instead of guessing a fixed delay, then fade the spinner out.
+    const mo=new MutationObserver(()=>{
+      if(embedDiv.querySelector('iframe,canvas')){
+        loader.classList.add('fading');
+        setTimeout(()=>loader.remove(),400);
+        mo.disconnect();
+      }
     });
-    inner.appendChild(loader);
-    inner.appendChild(frame);
+    mo.observe(embedDiv,{childList:true,subtree:true});
+    // Safety net so the spinner can never get stuck forever if CloudPano changes its markup.
+    setTimeout(()=>{ if(loader.isConnected){ loader.classList.add('fading'); setTimeout(()=>loader.remove(),400); } },8000);
   }else{
-    inner.innerHTML=`<div class="demo-placeholder"><div class="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><polygon points="9 7 9 17 17 12 9 7" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="10"/></svg></div><h3>${tour.title}</h3><p>${tour.text}</p></div>`;
+    mount.innerHTML=`<div class="demo-placeholder"><div class="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><polygon points="9 7 9 17 17 12 9 7" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="10"/></svg></div><h3>${tour.title}</h3><p>${tour.text}</p></div>`;
   }
+
   wrap.classList.add('open');
   currentTour=id;
 }
