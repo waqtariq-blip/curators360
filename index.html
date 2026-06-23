@@ -621,24 +621,7 @@ const tourData={
 let currentTour=null;
 const tourMounts={};
 
-function loadTour(id){
-  const inner=document.getElementById('tour-player-inner');
-  const tour=tourData[id];
-  if(!tour)return;
-
-  Object.values(tourMounts).forEach(el=>{ if(el!==tourMounts[id]) el.style.display='none'; });
-
-  if(tourMounts[id]){
-    tourMounts[id].style.display='block';
-    currentTour=id;
-    return;
-  }
-
-  const mount=document.createElement('div');
-  mount.className='tour-mount';
-  inner.appendChild(mount);
-  tourMounts[id]=mount;
-
+function buildEmbed(mount,tour){
   if(tour.type==='cloudpano'){
     const loader=document.createElement('div');
     loader.className='demo-placeholder';
@@ -662,9 +645,36 @@ function loadTour(id){
     });
     mo.observe(embedDiv,{childList:true,subtree:true});
     setTimeout(()=>{ if(loader.isConnected){ loader.classList.add('fading'); setTimeout(()=>loader.remove(),400); } },8000);
-  }else{
-    mount.innerHTML=`<div class="demo-placeholder"><div class="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><polygon points="9 7 9 17 17 12 9 7" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="10"/></svg></div><h3>${tour.title}</h3><p>${tour.text}</p></div>`;
   }
+}
+
+function loadTour(id){
+  const inner=document.getElementById('tour-player-inner');
+  const tour=tourData[id];
+  if(!tour)return;
+
+  // Clear other tours from DOM to stop their audio/video
+  Object.keys(tourMounts).forEach(otherId=>{
+    if(otherId!==id && tourMounts[otherId]){
+      tourMounts[otherId].innerHTML='';
+      delete tourMounts[otherId];
+    }
+  });
+
+  if(tourMounts[id]){
+    currentTour=id;
+    return;
+  }
+
+  let mount=inner.querySelector('[data-tour-id="'+id+'"]');
+  if(!mount){
+    mount=document.createElement('div');
+    mount.className='tour-mount';
+    mount.dataset.tourId=id;
+    inner.appendChild(mount);
+  }
+  tourMounts[id]=mount;
+  buildEmbed(mount,tour);
   currentTour=id;
 }
 
