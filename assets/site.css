@@ -344,3 +344,6 @@ a.c-card:hover .c-lab{color:var(--ink)}
 .area span{color:var(--mute);font-size:14px}
 .area:first-child{background:var(--gold);box-shadow:none}
 .area:first-child span{color:var(--ink)}
+.teaser{display:flex;justify-content:space-between;align-items:flex-end;gap:40px;flex-wrap:wrap}
+.teaser-actions{display:flex;gap:12px;flex-wrap:wrap}
+.calc{grid-template-columns:1fr 1.05fr}
