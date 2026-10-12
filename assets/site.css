@@ -347,3 +347,5 @@ a.c-card:hover .c-lab{color:var(--ink)}
 .teaser{display:flex;justify-content:space-between;align-items:flex-end;gap:40px;flex-wrap:wrap}
 .teaser-actions{display:flex;gap:12px;flex-wrap:wrap}
 .calc{grid-template-columns:1fr 1.05fr}
+.stat-src{margin-top:14px;font-size:12px;letter-spacing:.02em;color:var(--mute)}
+.stat-src::before{content:"Source: "}
