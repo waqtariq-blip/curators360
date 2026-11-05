@@ -98,7 +98,7 @@ if(window.THREE&&hasGL){
 }
 scenes.forEach(b=>b.addEventListener('click',()=>{
   scenes.forEach(x=>x.classList.toggle('on',x===b));
-  vName.textContent=b.dataset.name;vLink.href=b.dataset.href;setScene(b.dataset.src);
+  vName.textContent=b.dataset.name;if(vLink)vLink.href=b.dataset.href;setScene(b.dataset.src);
 }));
 setScene(scenes[0].dataset.src);
 

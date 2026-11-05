@@ -3,15 +3,42 @@
   "headers": [
     {
       "source": "/tours/rajdhani(.*)",
-      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
     },
     {
       "source": "/tours/Kickstart(.*)",
-      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
     },
     {
       "source": "/img/(.*)",
-      "headers": [{ "key": "Cache-Control", "value": "public, max-age=2592000, stale-while-revalidate=86400" }]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=2592000, stale-while-revalidate=86400"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/tours/Kickstart",
+      "destination": "/tours/kickstart-preview/",
+      "permanent": true
+    },
+    {
+      "source": "/tours/Kickstart/(.*)",
+      "destination": "/tours/kickstart-preview/",
+      "permanent": true
     }
   ]
 }
